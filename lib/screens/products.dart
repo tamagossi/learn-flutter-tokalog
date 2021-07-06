@@ -14,11 +14,12 @@ class ProductsScreen extends StatelessWidget {
         child: GridView.builder(
           padding: const EdgeInsets.all(10),
           itemCount: products.length,
-          itemBuilder: (ctx, index) =>
-              OrganismProductItem(product: products[index]),
+          itemBuilder: (ctx, index) => OrganismProductItem(
+            product: products[index],
+          ),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 3 / 2,
+            childAspectRatio: 3 / 4,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
           ),

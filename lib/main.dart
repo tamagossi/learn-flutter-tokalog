@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tokalog/configs/colors.dart';
 import 'package:tokalog/screens/products.dart';
 
 void main() {
@@ -14,7 +16,10 @@ class MyApp extends StatelessWidget {
       home: ProductsScreen(),
       routes: {},
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        accentColor: AppColor.pink,
+        canvasColor: AppColor.white,
+        primarySwatch: AppColor.rose,
+        fontFamily: GoogleFonts.lato().toString(),
       ),
     );
   }
