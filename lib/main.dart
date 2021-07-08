@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tokalog/configs/colors.dart';
-import 'package:tokalog/screens/products.dart';
+import 'package:tokalog/screens/products/index.dart';
 
 void main() {
   runApp(MyApp());
