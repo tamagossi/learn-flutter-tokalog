@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tokalog/mock/product.dart';
+import 'package:provider/provider.dart';
+import 'package:tokalog/models/product.dart';
+import 'package:tokalog/providers/product.dart';
 import 'package:tokalog/widgets/organism/product_item.dart';
 import 'package:tokalog/widgets/platform/platform_scaffold.dart';
 
@@ -8,6 +10,9 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Product> products =
+        Provider.of<ProductProvider>(context).products;
+
     return PlatformScaffold(
       appBarText: Text('Takalog'),
       content: SafeArea(
