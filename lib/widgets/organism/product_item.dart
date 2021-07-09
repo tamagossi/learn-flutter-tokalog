@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'package:tokalog/models/product.dart';
+import 'package:tokalog/providers/product.dart';
 import 'package:tokalog/screens/products/detail.dart';
 import 'package:tokalog/widgets/platform/platform_icon_button.dart';
 import 'package:tokalog/widgets/platform/platform_progress_indicator.dart';
@@ -23,6 +25,8 @@ class OrganismProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var productProvider = Provider.of<ProductProvider>(context);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -32,7 +36,7 @@ class OrganismProductItem extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) => ProductDetailScreen(
-                  product: product,
+                  id: product.id,
                 ),
               ),
             );
@@ -75,8 +79,14 @@ class OrganismProductItem extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       PlatformIconButton(
-                        onPressed: () {},
-                        icon: buildIcon(context, Icons.favorite),
+                        onPressed: () {
+                          productProvider.setProductFavoriteStatus(product.id);
+                        },
+                        icon: buildIcon(
+                            context,
+                            product.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border),
                       ),
                     ],
                   ),

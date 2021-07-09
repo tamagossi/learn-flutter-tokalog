@@ -44,4 +44,18 @@ class ProductProvider with ChangeNotifier {
     _products.add(value);
     notifyListeners();
   }
+
+  Product getById(String id) {
+    return _products.firstWhere((prod) => prod.id == id);
+  }
+
+  Product setProductFavoriteStatus(String id) {
+    List<Product> products = [..._products];
+
+    int selectedProductIndex = products.indexWhere((prod) => prod.id == id);
+    products[selectedProductIndex].isFavorite =
+        !products[selectedProductIndex].isFavorite;
+    _products = products;
+    notifyListeners();
+  }
 }
