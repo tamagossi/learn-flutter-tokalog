@@ -36,6 +36,10 @@ class ProductProvider with ChangeNotifier {
     ),
   ];
 
+  List<Product> get favoriteProduct {
+    return _products.where((prod) => prod.isFavorite).toList();
+  }
+
   List<Product> get products {
     return [..._products];
   }
@@ -49,7 +53,7 @@ class ProductProvider with ChangeNotifier {
     return _products.firstWhere((prod) => prod.id == id);
   }
 
-  Product setProductFavoriteStatus(String id) {
+  void setProductFavoriteStatus(String id) {
     List<Product> products = [..._products];
 
     int selectedProductIndex = products.indexWhere((prod) => prod.id == id);

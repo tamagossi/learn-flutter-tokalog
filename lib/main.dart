@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
         home: ProductsScreen(),
         routes: {},
         theme: ThemeData(
-          accentColor: AppColor.pink,
+          accentColor: AppColor.rose,
           canvasColor: AppColor.white,
-          primarySwatch: AppColor.rose,
           fontFamily: GoogleFonts.lato().toString(),
+          primarySwatch: AppColor.white,
         ),
       ),
     );

@@ -6,10 +6,14 @@ import 'package:flutter/material.dart';
 class PlatformScaffold extends StatelessWidget {
   final Widget appBarText;
   final Widget content;
+  final Widget trailing;
+  final List<Widget> actions;
 
   PlatformScaffold({
-    this.appBarText,
+    @required this.appBarText,
+    this.actions,
     this.content,
+    this.trailing,
   });
 
   @override
@@ -19,12 +23,14 @@ class PlatformScaffold extends StatelessWidget {
             child: content,
             navigationBar: CupertinoNavigationBar(
               middle: appBarText,
+              trailing: trailing ?? null,
             ),
           )
         : Scaffold(
             body: content,
             appBar: AppBar(
               title: appBarText,
+              actions: actions ?? null,
             ),
           );
   }
