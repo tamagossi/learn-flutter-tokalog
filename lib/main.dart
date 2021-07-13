@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:tokalog/configs/colors.dart';
-import 'package:tokalog/providers/product.dart';
+import 'package:tokalog/providers/index.dart';
 import 'package:tokalog/screens/products/index.dart';
 
 void main() {
@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ProductProvider(),
+    return MultiProvider(
+      providers: MainProvider.providers,
       child: MaterialApp(
         title: 'Tokalog',
         home: ProductsScreen(),

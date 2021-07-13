@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:tokalog/models/product.dart';
+import 'package:tokalog/providers/cart.dart';
 import 'package:tokalog/providers/product.dart';
 import 'package:tokalog/screens/products/detail.dart';
 import 'package:tokalog/widgets/platform/platform_icon_button.dart';
@@ -25,6 +26,7 @@ class OrganismProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cartProvider = Provider.of<CartProvider>(context);
     var productProvider = Provider.of<ProductProvider>(context);
 
     return ClipRRect(
@@ -74,7 +76,9 @@ class OrganismProductItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       PlatformIconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          cartProvider.addToCart(product);
+                        },
                         icon: buildIcon(context, Icons.shopping_cart),
                       ),
                       SizedBox(width: 10),

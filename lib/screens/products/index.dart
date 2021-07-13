@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -72,6 +74,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Takalog'),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: Icon(
+              Platform.isIOS ? CupertinoIcons.cart : Icons.shopping_cart,
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
