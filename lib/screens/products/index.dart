@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/models/product.dart';
+import 'package:tokalog/providers/cart.dart';
 import 'package:tokalog/providers/product.dart';
+import 'package:tokalog/widgets/molecules/badge.dart';
 import 'package:tokalog/widgets/organism/product_item.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -77,8 +79,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
         actions: [
           Container(
             margin: EdgeInsets.only(right: 10),
-            child: Icon(
-              Platform.isIOS ? CupertinoIcons.cart : Icons.shopping_cart,
+            child: Consumer<CartProvider>(
+              builder: (_, cartProvider, __) => MoleculeBadge(
+                child: Icon(
+                  Platform.isIOS ? CupertinoIcons.cart : Icons.shopping_cart,
+                ),
+                value: cartProvider.cartCount.toString(),
+              ),
             ),
           ),
         ],

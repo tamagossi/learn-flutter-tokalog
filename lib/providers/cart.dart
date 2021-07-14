@@ -3,7 +3,7 @@ import 'package:tokalog/models/cart.dart';
 import 'package:tokalog/models/product.dart';
 
 class CartProvider with ChangeNotifier {
-  Map<String, Cart> _carts;
+  Map<String, Cart> _carts = {};
 
   Map<String, Cart> get carts {
     return {..._carts};
@@ -31,5 +31,18 @@ class CartProvider with ChangeNotifier {
         ),
       );
     }
+
+    notifyListeners();
+  }
+
+  int get cartCount {
+    var count = 0;
+    if (_carts.isNotEmpty) {
+      _carts.forEach((key, value) {
+        count += value.quantity;
+      });
+    }
+
+    return count;
   }
 }
