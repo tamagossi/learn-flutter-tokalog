@@ -45,4 +45,15 @@ class CartProvider with ChangeNotifier {
 
     return count;
   }
+
+  double get totalAmount {
+    var total = 0.0;
+
+    if (_carts.isNotEmpty) {
+      _carts.forEach((key, value) {
+        total += value.price;
+      });
+    }
+    return total;
+  }
 }
