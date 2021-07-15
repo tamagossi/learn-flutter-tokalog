@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tokalog/models/product.dart';
+import 'package:tokalog/providers/product.dart';
 import 'package:tokalog/widgets/platform/platform_scaffold.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -24,9 +24,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
      * with Consumer approach, you can listen to provider only on a spesific widget
      * 
     */
-    return Consumer<Product>(
-      builder: (ctx, product, child) => PlatformScaffold(
-        appBarText: Text(product.title),
+    return Consumer<ProductProvider>(
+      builder: (ctx, productProvider, child) => PlatformScaffold(
+        appBarText: Text(productProvider.getById(widget.id).title),
         content: Center(
           child: Text('Hallo from product detail page'),
         ),

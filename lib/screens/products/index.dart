@@ -90,10 +90,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
               },
               child: Consumer<CartProvider>(
                 builder: (_, cartProvider, __) => MoleculeBadge(
+                  value: cartProvider.cartCount.toString(),
                   child: Icon(
                     Platform.isIOS ? CupertinoIcons.cart : Icons.shopping_cart,
                   ),
-                  value: cartProvider.cartCount.toString(),
                 ),
               ),
             ),

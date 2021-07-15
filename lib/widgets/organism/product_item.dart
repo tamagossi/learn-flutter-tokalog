@@ -76,10 +76,10 @@ class OrganismProductItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       PlatformIconButton(
+                        icon: buildIcon(context, Icons.shopping_cart),
                         onPressed: () {
                           cartProvider.addToCart(product);
                         },
-                        icon: buildIcon(context, Icons.shopping_cart),
                       ),
                       SizedBox(width: 10),
                       PlatformIconButton(
