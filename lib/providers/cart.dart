@@ -9,32 +9,6 @@ class CartProvider with ChangeNotifier {
     return {..._carts};
   }
 
-  void addToCart(Product product) {
-    if (_carts.containsKey(product.id)) {
-      _carts.update(
-        product.id,
-        (item) => Cart(
-          id: item.id,
-          price: item.price,
-          quantity: item.quantity + 1,
-          title: item.title,
-        ),
-      );
-    } else {
-      _carts.putIfAbsent(
-        product.id,
-        () => Cart(
-          id: DateTime.now().toString(),
-          price: product.price,
-          quantity: 1,
-          title: product.title,
-        ),
-      );
-    }
-
-    notifyListeners();
-  }
-
   int get cartCount {
     var count = 0;
     if (_carts.isNotEmpty) {
@@ -55,5 +29,38 @@ class CartProvider with ChangeNotifier {
       });
     }
     return total;
+  }
+
+  void addToCart(Product product) {
+    if (_carts.containsKey(product.id)) {
+      _carts.update(
+        product.id,
+        (item) => Cart(
+          id: item.id,
+          productId: product.id,
+          price: item.price,
+          quantity: item.quantity + 1,
+          title: item.title,
+        ),
+      );
+    } else {
+      _carts.putIfAbsent(
+        product.id,
+        () => Cart(
+          id: DateTime.now().toString(),
+          productId: product.id,
+          price: product.price,
+          quantity: 1,
+          title: product.title,
+        ),
+      );
+    }
+
+    notifyListeners();
+  }
+
+  void removeFromCart(cartId) {
+    _carts.remove(cartId);
+    notifyListeners();
   }
 }
