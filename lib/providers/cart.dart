@@ -59,6 +59,11 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void flushCart() {
+    _carts = {};
+    notifyListeners();
+  }
+
   void removeFromCart(cartId) {
     _carts.remove(cartId);
     notifyListeners();

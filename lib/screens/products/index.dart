@@ -6,8 +6,10 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/models/product.dart';
 import 'package:tokalog/providers/cart.dart';
+import 'package:tokalog/providers/orders.dart';
 import 'package:tokalog/providers/product.dart';
 import 'package:tokalog/screens/cart.dart';
+import 'package:tokalog/screens/order.dart';
 import 'package:tokalog/widgets/molecules/badge.dart';
 import 'package:tokalog/widgets/organism/product_item.dart';
 
@@ -70,6 +72,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
+    final bool hasIncompleteOrder =
+        Provider.of<OrderProvider>(context).isHasIncompleteOrder;
     final List<Product> products = selectedFilter == 'All'
         ? Provider.of<ProductProvider>(context).products
         : Provider.of<ProductProvider>(context).favoriteProduct;
@@ -101,33 +105,82 @@ class _ProductsScreenState extends State<ProductsScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 6 / 100 * deviceHeight,
-              padding: const EdgeInsets.all(10),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: buildSliderItem(context),
-              ),
-            ),
-            Container(
-              height: 77 / 100 * deviceHeight,
-              child: GridView.builder(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              hasIncompleteOrder
+                  ? Container(
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('You have some incomplete order'),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (ctx) => OrderScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Order!',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 15,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: Offset(0, 1), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                    )
+                  : null,
+              Container(
+                height: 6 / 100 * deviceHeight,
                 padding: const EdgeInsets.all(10),
-                itemCount: products.length,
-                itemBuilder: (ctx, index) => OrganismProductItem(
-                  product: products[index],
-                ),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 3 / 4,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: buildSliderItem(context),
                 ),
               ),
-            ),
-          ],
+              Container(
+                height: 60 / 100 * deviceHeight,
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(10),
+                  itemCount: products.length,
+                  itemBuilder: (ctx, index) => OrganismProductItem(
+                    product: products[index],
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3 / 4,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

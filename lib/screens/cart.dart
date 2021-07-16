@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/providers/cart.dart';
+import 'package:tokalog/providers/orders.dart';
 import 'package:tokalog/widgets/organism/cart_item.dart';
 
 class CartScreen extends StatefulWidget {
@@ -12,6 +13,15 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+
+    void order() {
+      orderProvider.addOrder(
+        cartProvider.carts.values.toList(),
+        cartProvider.totalAmount,
+      );
+      cartProvider.flushCart();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -35,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: order,
                   child: Text(
                     'Order Now',
                     style: TextStyle(color: Colors.black87),
