@@ -9,13 +9,11 @@ import 'package:tokalog/providers/cart.dart';
 import 'package:tokalog/providers/orders.dart';
 import 'package:tokalog/providers/product.dart';
 import 'package:tokalog/screens/cart.dart';
-import 'package:tokalog/screens/order.dart';
+import 'package:tokalog/screens/menu.dart';
 import 'package:tokalog/widgets/molecules/badge.dart';
 import 'package:tokalog/widgets/organism/product_item.dart';
 
 class ProductsScreen extends StatefulWidget {
-  static const route = '/';
-
   @override
   _ProductsScreenState createState() => _ProductsScreenState();
 }
@@ -72,8 +70,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
-    final bool hasIncompleteOrder =
-        Provider.of<OrderProvider>(context).isHasIncompleteOrder;
     final List<Product> products = selectedFilter == 'All'
         ? Provider.of<ProductProvider>(context).products
         : Provider.of<ProductProvider>(context).favoriteProduct;
@@ -82,79 +78,47 @@ class _ProductsScreenState extends State<ProductsScreen> {
       appBar: AppBar(
         title: Text('Takalog'),
         actions: [
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => CartScreen(),
-                  ),
-                );
-              },
-              child: Consumer<CartProvider>(
-                builder: (_, cartProvider, __) => MoleculeBadge(
-                  value: cartProvider.cartCount.toString(),
-                  child: Icon(
-                    Platform.isIOS ? CupertinoIcons.cart : Icons.shopping_cart,
+          Row(
+            children: [
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (ctx) => CartScreen()),
+                    );
+                  },
+                  child: Consumer<CartProvider>(
+                    builder: (_, cartProvider, __) => MoleculeBadge(
+                      value: cartProvider.cartCount.toString(),
+                      child: Icon(
+                        Platform.isIOS
+                            ? CupertinoIcons.cart
+                            : Icons.shopping_cart,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+              SizedBox(width: 10),
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: GestureDetector(
+                  child: Icon(Icons.menu_outlined),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (ctx) => MenuScreen()),
+                    );
+                  },
+                ),
+              ),
+            ],
+          )
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              hasIncompleteOrder
-                  ? Container(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('You have some incomplete order'),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (ctx) => OrderScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Order!',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 15,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: Offset(0, 1), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                    )
-                  : null,
               Container(
                 height: 6 / 100 * deviceHeight,
                 padding: const EdgeInsets.all(10),
