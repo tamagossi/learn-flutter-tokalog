@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/providers/cart.dart';
 import 'package:tokalog/providers/orders.dart';
+import 'package:tokalog/screens/order.dart';
 import 'package:tokalog/widgets/organism/cart_item.dart';
 
 class CartScreen extends StatefulWidget {
@@ -21,6 +22,10 @@ class _CartScreenState extends State<CartScreen> {
         cartProvider.totalAmount,
       );
       cartProvider.flushCart();
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (ctx) => OrderScreen()),
+      );
     }
 
     return Scaffold(
