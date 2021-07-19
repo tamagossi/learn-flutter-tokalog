@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +15,53 @@ import 'package:tokalog/widgets/platform/platform_progress_indicator.dart';
 
 class OrganismProductItem extends StatelessWidget {
   final Product product;
-
   OrganismProductItem({this.product});
+
+  void addToCart(BuildContext context, CartProvider cartProvider) {
+    BuildContext dialogContext;
+    final content = Text('Sucessfully add item to the cart');
+
+    cartProvider.addToCart(product);
+    Platform.isIOS
+        ? showCupertinoDialog(
+            barrierDismissible: true,
+            context: context,
+            builder: (BuildContext ctx) {
+              dialogContext = ctx;
+
+              return CupertinoAlertDialog(
+                content: content,
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text('Oke'),
+                    onPressed: () {
+                      Navigator.pop(dialogContext);
+                    },
+                  ),
+                ],
+              );
+            },
+          )
+        : showDialog(
+            barrierDismissible: true,
+            context: context,
+            builder: (BuildContext ctx) {
+              dialogContext = ctx;
+
+              return AlertDialog(
+                content: content,
+                actions: [
+                  TextButton(
+                    child: Text('Oke'),
+                    onPressed: () {
+                      Navigator.pop(dialogContext);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+  }
 
   Icon buildIcon(BuildContext context, IconData icon) {
     return Icon(
@@ -77,9 +124,7 @@ class OrganismProductItem extends StatelessWidget {
                     children: [
                       PlatformIconButton(
                         icon: buildIcon(context, Icons.shopping_cart),
-                        onPressed: () {
-                          cartProvider.addToCart(product);
-                        },
+                        onPressed: () => addToCart(context, cartProvider),
                       ),
                       SizedBox(width: 10),
                       PlatformIconButton(
@@ -87,10 +132,11 @@ class OrganismProductItem extends StatelessWidget {
                           productProvider.setProductFavoriteStatus(product.id);
                         },
                         icon: buildIcon(
-                            context,
-                            product.isFavorite
-                                ? Icons.favorite
-                                : Icons.favorite_border),
+                          context,
+                          product.isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                        ),
                       ),
                     ],
                   ),

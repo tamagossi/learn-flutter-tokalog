@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tokalog/screens/order.dart';
-import 'package:tokalog/screens/products/index.dart';
+import 'package:tokalog/screens/user_product.dart';
+import 'package:tokalog/widgets/molecules/menu_item.dart';
 
 class MenuScreen extends StatefulWidget {
   @override
@@ -26,31 +27,35 @@ class _MenuScreenState extends State<MenuScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'My Activity',
+              'Activity',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 15,
               ),
             ),
-            SizedBox(height: 15),
-            GestureDetector(
+            SizedBox(height: 20),
+            MoleculeMenuItem(
+              icon: Icons.receipt_outlined,
+              text: 'My Order',
               onTap: () {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (ctx) => OrderScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => OrderScreen(),
+                  ),
                 );
               },
-              child: Row(
-                children: [
-                  Icon(Icons.receipt_outlined),
-                  SizedBox(width: 10),
-                  Text(
-                    'My Order',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
+            ),
+            SizedBox(height: 15),
+            MoleculeMenuItem(
+              icon: Icons.inventory_2_outlined,
+              text: 'Product Management',
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => UserProductScreen(),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),
