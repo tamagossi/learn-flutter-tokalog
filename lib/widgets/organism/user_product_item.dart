@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tokalog/models/product.dart';
+import 'package:tokalog/screens/user/product/edit.dart';
 
 class OrganismUserProductItem extends StatelessWidget {
   final Product product;
@@ -46,7 +47,15 @@ class OrganismUserProductItem extends StatelessWidget {
                       height: 25,
                       width: 100,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => UserProductEditScreen(
+                                product: product,
+                              ),
+                            ),
+                          );
+                        },
                         child: Text(
                           'Edit Product',
                           style: TextStyle(

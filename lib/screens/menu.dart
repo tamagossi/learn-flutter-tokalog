@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tokalog/screens/order.dart';
-import 'package:tokalog/screens/user_product.dart';
+import 'package:tokalog/screens/user/product/index.dart';
 import 'package:tokalog/widgets/molecules/menu_item.dart';
 
 class MenuScreen extends StatefulWidget {
