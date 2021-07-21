@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tokalog/models/product.dart';
+import 'package:tokalog/widgets/molecules/input_group/number_input.dart';
 import 'package:tokalog/widgets/molecules/input_group/text_input.dart';
 
 class UserProductEditScreen extends StatefulWidget {
@@ -23,9 +24,15 @@ class _UserProductEditScreenState extends State<UserProductEditScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  MoleculesTextInput(
+                  MoleculeTextInput(
                     label: 'Name',
                     placeholder: 'Product Name',
+                  ),
+                  SizedBox(height: 20),
+                  MoleculeNumberInput(
+                    label: 'Price',
+                    placeholder: 'Product Price',
+                    prefix: '\$',
                   ),
                 ],
               ),

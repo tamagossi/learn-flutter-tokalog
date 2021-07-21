@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class MoleculesTextInput extends StatelessWidget {
+class MoleculeTextInput extends StatelessWidget {
   final String label;
   final String placeholder;
   final String inputHelp;
   final TextInputAction textInputAction;
 
-  MoleculesTextInput({
+  MoleculeTextInput({
     @required this.label,
     this.inputHelp,
     this.placeholder,
