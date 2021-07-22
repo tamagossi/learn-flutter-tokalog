@@ -3,13 +3,15 @@ import 'package:flutter/services.dart';
 
 class MoleculeNumberInput extends StatelessWidget {
   final dynamic prefix;
-  final String label;
-  final String placeholder;
   final String inputHelp;
+  final String label;
+  final String name;
+  final String placeholder;
   final TextInputAction textInputAction;
 
   MoleculeNumberInput({
     @required this.label,
+    @required this.name,
     this.inputHelp,
     this.placeholder,
     this.prefix,
@@ -64,6 +66,7 @@ class MoleculeNumberInput extends StatelessWidget {
               child: TextFormField(
                 keyboardType: TextInputType.number,
                 textInputAction: textInputAction,
+                style: TextStyle(height: 1, fontSize: 15),
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(bottom: 10, top: 8),
                   enabledBorder: underlineInputBorder,
@@ -72,7 +75,10 @@ class MoleculeNumberInput extends StatelessWidget {
                   hintText: placeholder ?? label,
                   isDense: true,
                 ),
-                style: TextStyle(height: 1, fontSize: 15),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  FilteringTextInputFormatter.allow(RegExp(r'^ ?\d*')),
+                ],
               ),
             ),
           ],

@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MoleculeTextInput extends StatelessWidget {
-  final String label;
-  final String placeholder;
+  final Function onChange;
+  final int maxLines;
   final String inputHelp;
+  final String label;
+  final String name;
+  final String placeholder;
   final TextInputAction textInputAction;
+  final TextInputType keyboardType;
 
   MoleculeTextInput({
     @required this.label,
+    @required this.name,
     this.inputHelp,
+    this.keyboardType = TextInputType.text,
+    this.maxLines = 1,
+    this.onChange,
     this.placeholder,
     this.textInputAction = TextInputAction.next,
   });
@@ -33,8 +41,11 @@ class MoleculeTextInput extends StatelessWidget {
           ),
         ),
         TextFormField(
-          keyboardType: TextInputType.text,
+          maxLines: maxLines,
+          keyboardType: keyboardType,
           textInputAction: textInputAction,
+          onChanged: onChange != null ? onChange : null,
+          style: TextStyle(height: 1, fontSize: 15),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 10, top: 8),
             enabledBorder: underlineInputBorder,
@@ -43,7 +54,6 @@ class MoleculeTextInput extends StatelessWidget {
             hintText: placeholder ?? label,
             isDense: true,
           ),
-          style: TextStyle(height: 1, fontSize: 15),
         ),
         if (inputHelp != null)
           Column(children: [
