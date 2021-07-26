@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/models/product.dart';
 import 'package:tokalog/providers/cart.dart';
-import 'package:tokalog/providers/orders.dart';
 import 'package:tokalog/providers/product.dart';
 import 'package:tokalog/screens/cart.dart';
 import 'package:tokalog/screens/menu.dart';

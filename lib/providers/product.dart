@@ -44,8 +44,18 @@ class ProductProvider with ChangeNotifier {
     return [..._products];
   }
 
-  void addProduct(value) {
+  void addProduct(Product value) {
     _products.add(value);
+    notifyListeners();
+  }
+
+  void editProduct(String id, Product value) {
+    List<Product> products = [..._products];
+
+    int selectedProductIndex = products.indexWhere((prod) => prod.id == id);
+    products[selectedProductIndex] = value;
+    _products = products;
+
     notifyListeners();
   }
 

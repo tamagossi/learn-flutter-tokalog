@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/providers/product.dart';
+import 'package:tokalog/screens/user/product/add.dart';
 import 'package:tokalog/widgets/organism/user_product_item.dart';
 
 class UserProductScreen extends StatefulWidget {
@@ -19,7 +20,11 @@ class _UserProductScreenState extends State<UserProductScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => UserProductAddScreen()),
+              );
+            },
           ),
         ],
       ),
