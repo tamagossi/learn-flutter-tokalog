@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MoleculeNumberInput extends StatelessWidget {
+  final dynamic initialValue;
   final dynamic prefix;
   final Function onSaved;
   final Function validator;
@@ -11,15 +12,17 @@ class MoleculeNumberInput extends StatelessWidget {
   final String placeholder;
   final TextInputAction textInputAction;
 
-  MoleculeNumberInput(
-      {@required this.label,
-      @required this.name,
-      this.inputHelp,
-      this.onSaved,
-      this.placeholder,
-      this.prefix,
-      this.textInputAction = TextInputAction.next,
-      this.validator});
+  MoleculeNumberInput({
+    @required this.label,
+    @required this.name,
+    this.initialValue,
+    this.inputHelp,
+    this.onSaved,
+    this.placeholder,
+    this.prefix,
+    this.textInputAction = TextInputAction.next,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +70,7 @@ class MoleculeNumberInput extends StatelessWidget {
               ),
             Flexible(
               child: TextFormField(
+                initialValue: initialValue,
                 keyboardType: TextInputType.number,
                 onSaved: onSaved,
                 style: TextStyle(height: 1, fontSize: 15),

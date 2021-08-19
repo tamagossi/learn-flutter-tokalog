@@ -37,7 +37,10 @@ class _UserProductEditScreenState extends State<UserProductEditScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
           child: Column(
             children: [
-              OrganismUserProductForm(initialValues: widget.product),
+              OrganismUserProductForm(
+                key: _userProductFormKey,
+                initialValues: widget.product,
+              ),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

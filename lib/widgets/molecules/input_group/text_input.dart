@@ -7,6 +7,7 @@ class MoleculeTextInput extends StatelessWidget {
   final Function onSaved;
   final Function validator;
   final int maxLines;
+  final String initialValue;
   final String inputHelp;
   final String label;
   final String name;
@@ -20,6 +21,7 @@ class MoleculeTextInput extends StatelessWidget {
     @required this.name,
     this.controller,
     this.focusNode,
+    this.initialValue,
     this.inputHelp,
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
@@ -51,6 +53,7 @@ class MoleculeTextInput extends StatelessWidget {
         TextFormField(
           controller: controller,
           focusNode: focusNode,
+          initialValue: initialValue,
           keyboardType: keyboardType,
           maxLines: maxLines,
           onChanged: onChange,

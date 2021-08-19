@@ -7,7 +7,10 @@ import 'package:tokalog/widgets/molecules/input_group/text_input.dart';
 class OrganismUserProductForm extends StatefulWidget {
   final Product initialValues;
 
-  OrganismUserProductForm({Key key, this.initialValues}) : super(key: key);
+  OrganismUserProductForm({
+    Key key,
+    this.initialValues,
+  }) : super(key: key);
 
   @override
   OrganismUserProductFormState createState() => OrganismUserProductFormState();
@@ -60,6 +63,7 @@ class OrganismUserProductFormState extends State<OrganismUserProductForm> {
       child: Column(
         children: <Widget>[
           MoleculeTextInput(
+            initialValue: widget.initialValues?.title,
             label: 'Name',
             name: 'name',
             placeholder: 'Product Name',
@@ -77,6 +81,7 @@ class OrganismUserProductFormState extends State<OrganismUserProductForm> {
           ),
           SizedBox(height: 20),
           MoleculeNumberInput(
+            initialValue: widget.initialValues?.price.toString(),
             label: 'Price',
             name: 'price',
             placeholder: 'Product Price',
@@ -101,6 +106,7 @@ class OrganismUserProductFormState extends State<OrganismUserProductForm> {
           ),
           SizedBox(height: 20),
           MoleculeTextInput(
+            initialValue: widget.initialValues?.description,
             keyboardType: TextInputType.multiline,
             label: 'Description',
             maxLines: 3,
@@ -126,7 +132,8 @@ class OrganismUserProductFormState extends State<OrganismUserProductForm> {
           ),
           SizedBox(height: 20),
           MoleculeTextInput(
-            controller: _imageController,
+            initialValue: widget.initialValues?.image,
+            controller: _imageController == null ? _imageController : null,
             focusNode: _imageFocus,
             keyboardType: TextInputType.url,
             label: 'Image',
