@@ -1,4 +1,17 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 class RequestAdapter {
   final String baseURL =
-      'https://sampingan.slack.com/archives/GT876PJF5/p1629346243002600?thread_ts=1629344643.000300&cid=GT876PJF5';
+      'https://flutter-firebase-demo-90f4d-default-rtdb.asia-southeast1.firebasedatabase.app/';
+
+  dynamic sendPostRequest(url, payload) {
+    var response = http.post(
+      Uri.parse((url)),
+      body: json.encode(payload ??= {}),
+    );
+
+    return response;
+  }
 }

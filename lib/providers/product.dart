@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tokalog/models/product.dart';
+import 'package:tokalog/services/product.dart';
 
 class ProductProvider with ChangeNotifier {
   List<Product> _products = [
@@ -35,6 +36,7 @@ class ProductProvider with ChangeNotifier {
           'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
   ];
+  var productService = new ProductService();
 
   List<Product> get favoriteProduct {
     return _products.where((prod) => prod.isFavorite).toList();
@@ -44,7 +46,20 @@ class ProductProvider with ChangeNotifier {
     return [..._products];
   }
 
-  void addProduct(Product value) {
+  void addProduct(Product value) async {
+    try {
+      var response = productService.addNewProduct({
+        'description': value.description,
+        'id': value.id,
+        'image': value.image,
+        'price': value.price,
+        'title': value.title,
+      });
+      print(response);
+    } catch (e) {
+      print(e);
+    }
+
     _products.add(value);
     notifyListeners();
   }

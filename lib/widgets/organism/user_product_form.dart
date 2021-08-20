@@ -81,11 +81,13 @@ class OrganismUserProductFormState extends State<OrganismUserProductForm> {
           ),
           SizedBox(height: 20),
           MoleculeNumberInput(
-            initialValue: widget.initialValues?.price.toString(),
             label: 'Price',
             name: 'price',
             placeholder: 'Product Price',
             prefix: '\$',
+            initialValue: widget.initialValues != null
+                ? widget.initialValues.price.toString()
+                : '',
             validator: (value) {
               if (value.isEmpty) return 'Please enter a price';
               if (double.tryParse(value) == null)
@@ -133,7 +135,11 @@ class OrganismUserProductFormState extends State<OrganismUserProductForm> {
           SizedBox(height: 20),
           MoleculeTextInput(
             initialValue: widget.initialValues?.image,
-            controller: _imageController == null ? _imageController : null,
+            controller: widget.initialValues != null
+                ? _imageController == null
+                    ? _imageController
+                    : null
+                : _imageController,
             focusNode: _imageFocus,
             keyboardType: TextInputType.url,
             label: 'Image',
