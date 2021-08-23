@@ -1,12 +1,18 @@
+import 'dart:developer';
+
 import 'package:tokalog/services/request_adapter.dart';
 
 class ProductService extends RequestAdapter {
-  dynamic addNewProduct(Map<String, dynamic> payload) async {
-    var response = await this.sendPostRequest(
-      this.baseURL + 'products.json',
-      payload,
-    );
+  Future<dynamic> addNewProduct(Map<String, dynamic> payload) async {
+    try {
+      var response = await this.sendPostRequest(
+        this.baseURL + 'products.json',
+        payload,
+      );
 
-    return response;
+      return response;
+    } catch (e) {
+      print(e);
+    }
   }
 }
