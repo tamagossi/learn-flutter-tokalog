@@ -19,6 +19,29 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   String selectedFilter = 'All';
+  bool _loading = true;
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero).then((_) => getProducts());
+    super.initState();
+  }
+
+  void getProducts() async {
+    try {
+      setState(() {
+        _loading = true;
+      });
+
+      await Provider.of<ProductProvider>(context, listen: false).getProducts();
+    } catch (error) {
+      print(error);
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
+  }
 
   Widget buildFilterSliderText(BuildContext context, String text) {
     return GestureDetector(
@@ -126,22 +149,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   children: buildSliderItem(context),
                 ),
               ),
-              Container(
-                height: 60 / 100 * deviceHeight,
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(10),
-                  itemCount: products.length,
-                  itemBuilder: (ctx, index) => OrganismProductItem(
-                    product: products[index],
-                  ),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 3 / 4,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                ),
-              ),
+              _loading
+                  ? Center(child: CircularProgressIndicator())
+                  : Container(
+                      height: 60 / 100 * deviceHeight,
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(10),
+                        itemCount: products.length,
+                        itemBuilder: (ctx, index) => OrganismProductItem(
+                          product: products[index],
+                        ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 3 / 4,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),

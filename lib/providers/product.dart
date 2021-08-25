@@ -5,48 +5,8 @@ import 'package:tokalog/models/product.dart';
 import 'package:tokalog/services/product.dart';
 
 class ProductProvider with ChangeNotifier {
-  List<Product> _products = [
-    Product(
-      id: 'p1',
-      title: 'Red Shirt',
-      description: 'A red shirt - it is pretty red!',
-      price: 29.99,
-      image:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    ),
-    Product(
-      id: 'p2',
-      title: 'Trousers',
-      description: 'A nice pair of trousers.',
-      price: 59.99,
-      image:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    ),
-    Product(
-      id: 'p3',
-      title: 'Yellow Scarf',
-      description: 'Warm and cozy - exactly what you need for the winter.',
-      price: 19.99,
-      image: 'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    ),
-    Product(
-      id: 'p4',
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 49.99,
-      image:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ),
-  ];
+  List<Product> _products = [];
   var productService = new ProductService();
-
-  List<Product> get favoriteProduct {
-    return _products.where((prod) => prod.isFavorite).toList();
-  }
-
-  List<Product> get products {
-    return [..._products];
-  }
 
   Future<void> addProduct(Product value) async {
     try {
@@ -92,6 +52,25 @@ class ProductProvider with ChangeNotifier {
     return _products.firstWhere((prod) => prod.id == id);
   }
 
+  Future<void> getProducts() async {
+    var response = await productService.getProducts();
+    List<Product> products = [];
+
+    response.forEach((key, value) {
+      products.add(Product(
+        price: value['price'],
+        description: value['description'],
+        id: key,
+        isFavorite: value['isFavorite'],
+        image: value['image'],
+        title: value['title'],
+      ));
+    });
+
+    _products = products;
+    notifyListeners();
+  }
+
   void setProductFavoriteStatus(String id) {
     List<Product> products = [..._products];
 
@@ -100,5 +79,13 @@ class ProductProvider with ChangeNotifier {
         !products[selectedProductIndex].isFavorite;
     _products = products;
     notifyListeners();
+  }
+
+  List<Product> get favoriteProduct {
+    return _products.where((prod) => prod.isFavorite).toList();
+  }
+
+  List<Product> get products {
+    return [..._products];
   }
 }
