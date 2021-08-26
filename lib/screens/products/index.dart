@@ -23,24 +23,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero).then((_) => getProducts());
+    Future.delayed(Duration.zero).then((_) => _getProducts());
     super.initState();
-  }
-
-  void getProducts() async {
-    try {
-      setState(() {
-        _loading = true;
-      });
-
-      await Provider.of<ProductProvider>(context, listen: false).getProducts();
-    } catch (error) {
-      print(error);
-    } finally {
-      setState(() {
-        _loading = false;
-      });
-    }
   }
 
   Widget buildFilterSliderText(BuildContext context, String text) {
@@ -81,6 +65,22 @@ class _ProductsScreenState extends State<ProductsScreen> {
     });
 
     return items;
+  }
+
+  Future<void> _getProducts() async {
+    try {
+      setState(() {
+        _loading = true;
+      });
+
+      await Provider.of<ProductProvider>(context, listen: false).getProducts();
+    } catch (error) {
+      print(error);
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   void setSelectedFilter(text) {
@@ -151,19 +151,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
               _loading
                   ? Center(child: CircularProgressIndicator())
-                  : Container(
-                      height: 60 / 100 * deviceHeight,
-                      child: GridView.builder(
-                        padding: const EdgeInsets.all(10),
-                        itemCount: products.length,
-                        itemBuilder: (ctx, index) => OrganismProductItem(
-                          product: products[index],
-                        ),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 3 / 4,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
+                  : RefreshIndicator(
+                      onRefresh: _getProducts,
+                      child: Container(
+                        height: 60 / 100 * deviceHeight,
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(10),
+                          itemCount: products.length,
+                          itemBuilder: (ctx, index) => OrganismProductItem(
+                            product: products[index],
+                          ),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 3 / 4,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
                         ),
                       ),
                     ),

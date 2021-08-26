@@ -6,28 +6,29 @@ class RequestAdapter {
   final String baseURL =
       'https://flutter-firebase-demo-90f4d-default-rtdb.asia-southeast1.firebasedatabase.app/';
 
-  Future<dynamic> sendGetRequest(url, {params = '?'}) async {
-    try {
-      final response = await http.get(
-        Uri.parse(baseURL + url + params),
-      );
+  Future<dynamic> sendGetRequest(
+    String url, {
+    Map<String, dynamic> params = const {},
+  }) async {
+    final response = await http.get(
+      Uri.parse(baseURL + url + parseParams(params)),
+    );
 
-      return json.decode(response.body);
-    } catch (error) {
-      print(error);
-    }
+    return json.decode(response.body);
   }
 
   Future<dynamic> sendPostRequest(url, payload) async {
-    try {
-      final response = await http.post(
-        Uri.parse(baseURL + url),
-        body: json.encode(payload ??= {}),
-      );
+    final response = await http.post(
+      Uri.parse(baseURL + url),
+      body: json.encode(payload ??= {}),
+    );
 
-      return json.decode(response.body);
-    } catch (error) {
-      print(error);
-    }
+    return json.decode(response.body);
+  }
+
+  String parseParams(params) {
+    if (params == {}) return '';
+
+    return '';
   }
 }

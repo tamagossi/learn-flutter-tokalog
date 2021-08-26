@@ -6,11 +6,12 @@ import 'package:tokalog/services/product.dart';
 
 class ProductProvider with ChangeNotifier {
   List<Product> _products = [];
-  var productService = new ProductService();
+  String _errorMessage = 'product providers error';
+  var _productService = new ProductService();
 
   Future<void> addProduct(Product value) async {
     try {
-      var response = await productService.addNewProduct({
+      var response = await _productService.addNewProduct({
         'description': value.description,
         'id': value.id,
         'image': value.image,
@@ -28,8 +29,8 @@ class ProductProvider with ChangeNotifier {
       );
       _products.add(newProduct);
       notifyListeners();
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      throw ('$_errorMessage - adding product: \n$error');
     }
   }
 
@@ -53,22 +54,26 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> getProducts() async {
-    var response = await productService.getProducts();
-    List<Product> products = [];
+    try {
+      var response = await _productService.getProducts();
+      List<Product> products = [];
 
-    response.forEach((key, value) {
-      products.add(Product(
-        price: value['price'],
-        description: value['description'],
-        id: key,
-        isFavorite: value['isFavorite'],
-        image: value['image'],
-        title: value['title'],
-      ));
-    });
+      response.forEach((key, value) {
+        products.add(Product(
+          price: value['price'],
+          description: value['description'],
+          id: key,
+          isFavorite: value['isFavorite'],
+          image: value['image'],
+          title: value['title'],
+        ));
+      });
 
-    _products = products;
-    notifyListeners();
+      _products = products;
+      notifyListeners();
+    } catch (error) {
+      throw ('$_errorMessage - getting product: \n$error');
+    }
   }
 
   void setProductFavoriteStatus(String id) {
