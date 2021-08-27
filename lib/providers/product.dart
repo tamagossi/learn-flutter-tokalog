@@ -11,42 +11,43 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> addProduct(Product value) async {
     try {
-      var response = await _productService.addNewProduct({
-        'description': value.description,
-        'id': value.id,
-        'image': value.image,
-        'isFavorite': false,
-        'price': value.price,
-        'title': value.title,
-      });
+      await _productService
+          .addProduct(convertProductInstanceToProductJSON(value));
 
-      var newProduct = new Product(
-        description: value.description,
-        id: response.name,
-        image: value.image,
-        price: value.price,
-        title: value.title,
-      );
-      _products.add(newProduct);
       notifyListeners();
     } catch (error) {
       throw ('$_errorMessage - adding product: \n$error');
     }
   }
 
-  void editProduct(String id, Product value) {
-    List<Product> products = [..._products];
-
-    int selectedProductIndex = products.indexWhere((prod) => prod.id == id);
-    products[selectedProductIndex] = value;
-    _products = products;
-
-    notifyListeners();
+  Future<void> editProduct(String id, Product value) async {
+    try {
+      await _productService.editProduct(
+          id, convertProductInstanceToProductJSON(value));
+      notifyListeners();
+    } catch (error) {
+      throw ('$_errorMessage - edit product: \n$error');
+    }
   }
 
-  void deleteProduct(String id) {
-    _products.removeWhere((product) => product.id == id);
-    notifyListeners();
+  Map<String, dynamic> convertProductInstanceToProductJSON(Product value) {
+    return {
+      'description': value.description,
+      'id': value.id,
+      'image': value.image,
+      'isFavorite': value.isFavorite ?? false,
+      'price': value.price,
+      'title': value.title,
+    };
+  }
+
+  Future<void> deleteProduct(String id) async {
+    try {
+      await _productService.deleteProduct(id);
+      notifyListeners();
+    } catch (error) {
+      throw ('$_errorMessage - delete product: \n$error');
+    }
   }
 
   Product getById(String id) {

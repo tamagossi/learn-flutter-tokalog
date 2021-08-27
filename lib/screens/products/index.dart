@@ -154,7 +154,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   : RefreshIndicator(
                       onRefresh: _getProducts,
                       child: Container(
-                        height: 60 / 100 * deviceHeight,
+                        height: 80 / 100 * deviceHeight,
                         child: GridView.builder(
                           padding: const EdgeInsets.all(10),
                           itemCount: products.length,

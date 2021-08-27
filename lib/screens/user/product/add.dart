@@ -12,19 +12,22 @@ class UserProductAddScreen extends StatefulWidget {
 }
 
 class _UserProductAddScreenState extends State<UserProductAddScreen> {
-  bool isLoading = false;
+  bool _isLoading = false;
   final GlobalKey<OrganismUserProductFormState> _userProductFormKey =
       new GlobalKey<OrganismUserProductFormState>();
 
-  void addNewProduct() async {
+  void addProduct() async {
     try {
       setState(() {
-        isLoading = true;
+        _isLoading = true;
       });
 
       final Product product = _userProductFormKey.currentState.getFormValues();
-      await Provider.of<ProductProvider>(context, listen: false)
-          .addProduct(product);
+      var productProvider =
+          Provider.of<ProductProvider>(context, listen: false);
+
+      await productProvider.addProduct(product);
+      await productProvider.getProducts();
 
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => UserProductScreen()),
@@ -33,7 +36,7 @@ class _UserProductAddScreenState extends State<UserProductAddScreen> {
       print(error);
     } finally {
       setState(() {
-        isLoading = true;
+        _isLoading = true;
       });
     }
   }
@@ -43,7 +46,7 @@ class _UserProductAddScreenState extends State<UserProductAddScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Add Product')),
       body: LoadingOverlay(
-        isLoading: isLoading,
+        isLoading: _isLoading,
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -57,7 +60,7 @@ class _UserProductAddScreenState extends State<UserProductAddScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: addNewProduct,
+                      onPressed: addProduct,
                       child: Text(
                         'Add Product',
                         style: TextStyle(
