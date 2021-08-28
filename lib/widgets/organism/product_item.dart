@@ -13,15 +13,22 @@ import 'package:tokalog/screens/products/detail.dart';
 import 'package:tokalog/widgets/platform/platform_icon_button.dart';
 import 'package:tokalog/widgets/platform/platform_progress_indicator.dart';
 
-class OrganismProductItem extends StatelessWidget {
+class OrganismProductItem extends StatefulWidget {
   final Product product;
   OrganismProductItem({this.product});
 
-  void addToCart(BuildContext context, CartProvider cartProvider) {
+  @override
+  _OrganismProductItemState createState() => _OrganismProductItemState();
+}
+
+class _OrganismProductItemState extends State<OrganismProductItem> {
+  bool loading = false;
+
+  void addToCart(BuildContext context) {
     BuildContext dialogContext;
     final content = Text('Sucessfully add item to the cart');
 
-    cartProvider.addToCart(product);
+    Provider.of<CartProvider>(context, listen: false).addToCart(widget.product);
     Platform.isIOS
         ? showCupertinoDialog(
             barrierDismissible: true,
@@ -71,11 +78,25 @@ class OrganismProductItem extends StatelessWidget {
     );
   }
 
+  void setFavoriteProduct(BuildContext context) {
+    try {
+      setState(() {
+        loading = true;
+      });
+
+      Provider.of<ProductProvider>(context, listen: false)
+          .setProductFavoriteStatus(widget.product.id);
+    } catch (error) {
+      print(error);
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var cartProvider = Provider.of<CartProvider>(context);
-    var productProvider = Provider.of<ProductProvider>(context);
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -85,14 +106,14 @@ class OrganismProductItem extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) => ProductDetailScreen(
-                  id: product.id,
+                  id: widget.product.id,
                 ),
               ),
             );
           },
           child: GridTile(
             child: CachedNetworkImage(
-              imageUrl: product.image,
+              imageUrl: widget.product.image,
               errorWidget: (_, __, error) => Icon(Icons.error),
               fit: BoxFit.cover,
               progressIndicatorBuilder: (context, url, progress) =>
@@ -105,7 +126,7 @@ class OrganismProductItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.title,
+                    widget.product.title,
                     style: GoogleFonts.lato(
                         color: Colors.black87,
                         fontSize: 13,
@@ -113,7 +134,7 @@ class OrganismProductItem extends StatelessWidget {
                   ),
                   SizedBox(height: 7),
                   Text(
-                    '\$ ${product.price}',
+                    '\$ ${widget.product.price}',
                     style: GoogleFonts.lato(
                         color: Colors.black87,
                         fontSize: 15,
@@ -124,18 +145,20 @@ class OrganismProductItem extends StatelessWidget {
                     children: [
                       PlatformIconButton(
                         icon: buildIcon(context, Icons.shopping_cart),
-                        onPressed: () => addToCart(context, cartProvider),
+                        onPressed: () => addToCart(context),
                       ),
                       SizedBox(width: 10),
                       PlatformIconButton(
                         onPressed: () {
-                          productProvider.setProductFavoriteStatus(product.id);
+                          setFavoriteProduct(context);
                         },
                         icon: buildIcon(
                           context,
-                          product.isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
+                          loading
+                              ? Icons.change_circle_outlined
+                              : widget.product.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
                         ),
                       ),
                     ],

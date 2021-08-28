@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/models/product.dart';
 import 'package:tokalog/providers/product.dart';
@@ -40,6 +39,8 @@ class _OrganismUserProductItemState extends State<OrganismUserProductItem> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
@@ -57,16 +58,19 @@ class _OrganismUserProductItemState extends State<OrganismUserProductItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
+                width: width * 0.5,
                 child: Row(
                   children: [
                     CircleAvatar(
                         backgroundImage: NetworkImage(widget.product.image)),
                     SizedBox(width: 15),
-                    Text(
-                      widget.product.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
+                    Expanded(
+                      child: Text(
+                        widget.product.title,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
                       ),
                     )
                   ],
@@ -123,8 +127,7 @@ class _OrganismUserProductItemState extends State<OrganismUserProductItem> {
                 ),
               ),
             ],
-          ),
-          SizedBox(height: 10)
+          )
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tokalog/providers/product.dart';
+import 'package:tokalog/screens/products/index.dart';
 import 'package:tokalog/screens/user/product/add.dart';
 import 'package:tokalog/widgets/organism/user_product_item.dart';
 
@@ -18,13 +19,28 @@ class _UserProductScreenState extends State<UserProductScreen> {
       appBar: AppBar(
         title: const Text('Product Management'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => UserProductAddScreen()),
-              );
-            },
+          Row(
+            children: [
+              Container(
+                child: GestureDetector(
+                  child: const Icon(Icons.home),
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => ProductsScreen()));
+                  },
+                ),
+              ),
+              SizedBox(width: 10),
+              Container(
+                child: GestureDetector(
+                  child: const Icon(Icons.add),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => UserProductAddScreen()));
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),

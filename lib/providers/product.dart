@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:tokalog/models/product.dart';
@@ -77,14 +78,19 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  void setProductFavoriteStatus(String id) {
-    List<Product> products = [..._products];
+  Future<void> setProductFavoriteStatus(String id) async {
+    try {
+      List<Product> products = [..._products];
 
-    int selectedProductIndex = products.indexWhere((prod) => prod.id == id);
-    products[selectedProductIndex].isFavorite =
-        !products[selectedProductIndex].isFavorite;
-    _products = products;
-    notifyListeners();
+      int selectedProductIndex = products.indexWhere((prod) => prod.id == id);
+      Product product = products[selectedProductIndex];
+
+      product.isFavorite = !product.isFavorite;
+
+      editProduct(id, product);
+    } catch (error) {
+      throw ('$_errorMessage - setting favorite product: \n$error');
+    }
   }
 
   List<Product> get favoriteProduct {
