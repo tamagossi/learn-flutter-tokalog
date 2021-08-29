@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:http/http.dart' as http;
 
 class RequestAdapter {
-  final String baseURL =
-      'https://flutter-firebase-demo-90f4d-default-rtdb.asia-southeast1.firebasedatabase.app/';
+  final String baseURL = dotenv.env['FIREBASE_URL'];
 
   Future<dynamic> sendDeleteRequest(url) async {
     final response = await http.delete(
