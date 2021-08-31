@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:tokalog/configs/colors.dart';
 import 'package:tokalog/providers/index.dart';
-import 'package:tokalog/screens/products/index.dart';
+import 'package:tokalog/screens/auth.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       providers: MainProvider.providers,
       child: MaterialApp(
         title: 'Tokalog',
-        home: ProductsScreen(),
+        home: AuthScreen(),
         routes: {},
         theme: ThemeData(
           accentColor: AppColor.rose,
