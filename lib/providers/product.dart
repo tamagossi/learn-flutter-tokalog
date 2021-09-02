@@ -11,6 +11,7 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> addProduct(Product value) async {
     try {
+      _productService = new ProductService();
       await _productService
           .addProduct(convertProductInstanceToProductJSON(value));
 
@@ -22,6 +23,7 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> editProduct(String id, Product value) async {
     try {
+      _productService = new ProductService();
       await _productService.editProduct(
           id, convertProductInstanceToProductJSON(value));
       notifyListeners();
@@ -43,6 +45,7 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     try {
+      _productService = new ProductService();
       await _productService.deleteProduct(id);
       notifyListeners();
     } catch (error) {
@@ -56,6 +59,7 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> getProducts() async {
     try {
+      _productService = new ProductService();
       var response = await _productService.getProducts();
       List<Product> products = [];
 

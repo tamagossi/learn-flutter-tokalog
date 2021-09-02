@@ -34,7 +34,16 @@ class RequestAdapter {
     return json.decode(response.body);
   }
 
-  Future<dynamic> sendPostRequest(url, payload) async {
+  Future<dynamic> sendCustomPostUrlRequest(url, payload) async {
+    final response = await http.post(
+      Uri.parse(url),
+      body: json.encode(payload),
+    );
+
+    return json.decode(response.body);
+  }
+
+  Future<dynamic> sendPostRequest(url, payload, {auth = false}) async {
     final response = await http.post(
       Uri.parse(baseURL + url),
       body: json.encode(payload ??= {}),

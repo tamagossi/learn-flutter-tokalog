@@ -118,8 +118,9 @@ class _OrganismUserProductItemState extends State<OrganismUserProductItem> {
                           size: 17,
                         ),
                         style: OutlinedButton.styleFrom(
-                          side:
-                              BorderSide(color: Theme.of(context).accentColor),
+                          side: BorderSide(
+                            color: Theme.of(context).accentColor,
+                          ),
                         ),
                       ),
                     ),
