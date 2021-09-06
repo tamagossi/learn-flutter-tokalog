@@ -12,6 +12,20 @@ class AuthProvider with ChangeNotifier {
   final String _firebaseAuthUrl = dotenv.env['FIREBASE_AUTH_URL'];
   final String _apiKey = dotenv.env['FIREBASE_KEY'];
 
+  bool get isAuthenticated {
+    return token != null;
+  }
+
+  String get token {
+    if (_expireDate != null &&
+        _expireDate.isAfter(DateTime.now()) &&
+        token != null) {
+      return _token;
+    } else {
+      return null;
+    }
+  }
+
   Future<void> login(Map<String, String> credential) async {
     this._authenticate(credential, 'LOGIN');
   }
@@ -32,9 +46,6 @@ class AuthProvider with ChangeNotifier {
       };
 
       String url = '$_firebaseAuthUrl${AUTH_TYPE[authType]}?key=$_apiKey';
-
-      print(credential);
-
       final response = await _authService.sendCustomPostUrlRequest(
         url,
         {
@@ -44,16 +55,34 @@ class AuthProvider with ChangeNotifier {
         },
       );
 
-      print(response);
+      _handleErroResponse(response);
 
-      if (response['error'] != 'null') {
-        throw AuthenticationException(
-          message: response['error']['message'],
-          code: response['error']['code'],
-        );
-      }
+      _storeResponseData(
+        expiresIn: response['expiresIn'],
+        id: response['localId'],
+        token: response['idToken'],
+      );
     } catch (error) {
       throw ('$_errorMessage - $authType: \n$error');
     }
+  }
+
+  void _handleErroResponse(response) {
+    if (response['error'] != null) {
+      throw AuthenticationException(
+        message: response['error']['message'],
+        code: response['error']['code'],
+      );
+    }
+  }
+
+  void _storeResponseData({String token, String id, String expiresIn}) {
+    _token = token;
+    _userId = id;
+    _expireDate = DateTime.now().add(
+      Duration(
+        seconds: int.parse(expiresIn),
+      ),
+    );
   }
 }

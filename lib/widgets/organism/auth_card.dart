@@ -38,7 +38,6 @@ class _AuthCardState extends State<AuthCard> {
       });
 
       if (widget.authMode == AuthMode.Login) {
-        print('You are here right?');
         await authProvider.login(_authData);
       } else {
         await authProvider.signup(_authData);
