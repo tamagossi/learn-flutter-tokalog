@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tokalog/models/exceptions/authentication.dart';
 import 'package:tokalog/providers/auth.dart';
 import 'package:tokalog/screens/auth.dart';
 
@@ -37,7 +38,8 @@ class _AuthCardState extends State<AuthCard> {
       });
 
       if (widget.authMode == AuthMode.Login) {
-        // Log user in
+        print('You are here right?');
+        await authProvider.login(_authData);
       } else {
         await authProvider.signup(_authData);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -48,13 +50,31 @@ class _AuthCardState extends State<AuthCard> {
 
         widget.setAuthMode(AuthMode.Login);
       }
+    } on AuthenticationException catch (error) {
+      _handleError(error.toString());
     } catch (error) {
-      print(error);
+      _handleError(error.toString());
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _handleError(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An error occured'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            child: Text('Okay'),
+            onPressed: () => Navigator.of(ctx).pop(),
+          )
+        ],
+      ),
+    );
   }
 
   void _switchAuthMode() {

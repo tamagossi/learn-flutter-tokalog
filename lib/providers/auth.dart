@@ -8,11 +8,9 @@ class AuthProvider with ChangeNotifier {
   String _token;
   String _userId;
 
-  AuthService _authService = new AuthService();
-
   final String _errorMessage = 'auth provider error';
   final String _firebaseAuthUrl = dotenv.env['FIREBASE_AUTH_URL'];
-  final String _APIKey = dotenv.env['FIREBASE_KEY'];
+  final String _apiKey = dotenv.env['FIREBASE_KEY'];
 
   Future<void> login(Map<String, String> credential) async {
     this._authenticate(credential, 'LOGIN');
@@ -33,7 +31,9 @@ class AuthProvider with ChangeNotifier {
         'SIGNUP': 'signUp'
       };
 
-      String url = '$_firebaseAuthUrl${AUTH_TYPE[authType]}?key=$_APIKey';
+      String url = '$_firebaseAuthUrl${AUTH_TYPE[authType]}?key=$_apiKey';
+
+      print(credential);
 
       final response = await _authService.sendCustomPostUrlRequest(
         url,
@@ -43,6 +43,8 @@ class AuthProvider with ChangeNotifier {
           'returnSecureToken': true,
         },
       );
+
+      print(response);
 
       if (response['error'] != 'null') {
         throw AuthenticationException(
