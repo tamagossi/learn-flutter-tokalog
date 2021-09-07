@@ -16,15 +16,14 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: MainProvider.providers,
       child: Consumer<AuthProvider>(
-        builder: (ctx, authProvider, _) => MaterialApp(
+        builder: (ctx, auth, _) => MaterialApp(
           title: 'Tokalog',
-          home: authProvider.isAuthenticated ? ProductsScreen() : AuthScreen(),
+          home: auth.isAuthenticated ? ProductsScreen() : AuthScreen(),
           routes: {},
           theme: ThemeData(
             accentColor: AppColor.rose,

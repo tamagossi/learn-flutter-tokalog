@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tokalog/models/exceptions/authentication.dart';
 import 'package:tokalog/services/auth.dart';
+import 'package:tokalog/services/local_storage.dart';
 
 class AuthProvider with ChangeNotifier {
   DateTime _expireDate;
@@ -11,15 +12,27 @@ class AuthProvider with ChangeNotifier {
   final String _errorMessage = 'auth provider error';
   final String _firebaseAuthUrl = dotenv.env['FIREBASE_AUTH_URL'];
   final String _apiKey = dotenv.env['FIREBASE_KEY'];
+  final tokenLocalStorage = new LocalStorage(fileName: 'tokalog_token');
+
+  AuthProvider() {
+    tokenLocalStorage.readContent().then(
+      (storedToken) {
+        if (storedToken != null) {
+          _token = storedToken;
+          notifyListeners();
+        }
+      },
+    );
+  }
 
   bool get isAuthenticated {
-    return token != null;
+    return _token != null;
   }
 
   String get token {
     if (_expireDate != null &&
         _expireDate.isAfter(DateTime.now()) &&
-        token != null) {
+        _token != null) {
       return _token;
     } else {
       return null;
@@ -57,10 +70,14 @@ class AuthProvider with ChangeNotifier {
 
       _handleErroResponse(response);
 
+      _storeTokenToStorage(
+        tokenId: response['idToken'],
+      );
+
       _storeResponseData(
         expiresIn: response['expiresIn'],
         id: response['localId'],
-        token: response['idToken'],
+        tokenId: response['idToken'],
       );
     } catch (error) {
       throw ('$_errorMessage - $authType: \n$error');
@@ -76,13 +93,22 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  void _storeResponseData({String token, String id, String expiresIn}) {
-    _token = token;
+  void _storeTokenToStorage({String tokenId}) async {
+    tokenLocalStorage.writeContent(tokenId);
+
+    final String storedToken = await tokenLocalStorage.readContent();
+    print(storedToken);
+  }
+
+  void _storeResponseData({String tokenId, String id, String expiresIn}) {
+    _token = tokenId;
     _userId = id;
     _expireDate = DateTime.now().add(
       Duration(
         seconds: int.parse(expiresIn),
       ),
     );
+
+    notifyListeners();
   }
 }
