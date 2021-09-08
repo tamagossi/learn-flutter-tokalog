@@ -2,13 +2,25 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:tokalog/services/local_storage.dart';
 
 class RequestAdapter {
   final String baseURL = dotenv.env['FIREBASE_URL'];
+  String token = '';
+
+  RequestAdapter() {
+    final tokenLocalStorage = new LocalStorage(fileName: 'tokalog_token');
+
+    tokenLocalStorage.readContent().then(
+      (storedToken) {
+        token = storedToken;
+      },
+    );
+  }
 
   Future<dynamic> sendDeleteRequest(url) async {
     final response = await http.delete(
-      Uri.parse(baseURL + url),
+      Uri.parse(baseURL + url + '?auth=$token'),
     );
 
     return json.decode(response.body);
@@ -19,7 +31,7 @@ class RequestAdapter {
     Map<String, dynamic> params = const {},
   }) async {
     final response = await http.get(
-      Uri.parse(baseURL + url + parseParams(params)),
+      Uri.parse(baseURL + url + parseParams(params) + '?auth=$token'),
     );
 
     return json.decode(response.body);
@@ -27,7 +39,7 @@ class RequestAdapter {
 
   Future<dynamic> sendPatchRequest(url, payload) async {
     final response = await http.patch(
-      Uri.parse(baseURL + url),
+      Uri.parse(baseURL + url + '?auth=$token'),
       body: json.encode(payload ??= {}),
     );
 
@@ -45,7 +57,7 @@ class RequestAdapter {
 
   Future<dynamic> sendPostRequest(url, payload, {auth = false}) async {
     final response = await http.post(
-      Uri.parse(baseURL + url),
+      Uri.parse(baseURL + url + '?auth=$token'),
       body: json.encode(payload ??= {}),
     );
 

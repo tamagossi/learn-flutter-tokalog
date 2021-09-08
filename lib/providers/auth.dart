@@ -97,7 +97,6 @@ class AuthProvider with ChangeNotifier {
     tokenLocalStorage.writeContent(tokenId);
 
     final String storedToken = await tokenLocalStorage.readContent();
-    print(storedToken);
   }
 
   void _storeResponseData({String tokenId, String id, String expiresIn}) {
