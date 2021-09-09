@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:tokalog/models/exceptions/http.dart';
 import 'package:tokalog/models/product.dart';
 import 'package:tokalog/providers/cart.dart';
 import 'package:tokalog/providers/product.dart';
+import 'package:tokalog/screens/auth.dart';
 import 'package:tokalog/screens/cart.dart';
 import 'package:tokalog/screens/menu.dart';
 import 'package:tokalog/widgets/molecules/badge.dart';
@@ -74,6 +76,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
       });
 
       await Provider.of<ProductProvider>(context, listen: false).getProducts();
+    } on HTTPRequestException catch (error) {
+      if (error.isTokenValid == false) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => AuthScreen(),
+          ),
+        );
+      }
     } catch (error) {
       print(error);
     } finally {

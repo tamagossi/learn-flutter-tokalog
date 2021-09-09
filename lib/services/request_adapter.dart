@@ -6,21 +6,12 @@ import 'package:tokalog/services/local_storage.dart';
 
 class RequestAdapter {
   final String baseURL = dotenv.env['FIREBASE_URL'];
-  String token = '';
-
-  RequestAdapter() {
-    final tokenLocalStorage = new LocalStorage(fileName: 'tokalog_token');
-
-    tokenLocalStorage.readContent().then(
-      (storedToken) {
-        token = storedToken;
-      },
-    );
-  }
 
   Future<dynamic> sendDeleteRequest(url) async {
+    final String endpoint = await concateAuthToken(baseURL + url);
+
     final response = await http.delete(
-      Uri.parse(baseURL + url + '?auth=$token'),
+      Uri.parse(endpoint),
     );
 
     return json.decode(response.body);
@@ -30,23 +21,34 @@ class RequestAdapter {
     String url, {
     Map<String, dynamic> params = const {},
   }) async {
+    final String endpoint =
+        await concateAuthToken(baseURL + url + parseParams(params));
+
     final response = await http.get(
-      Uri.parse(baseURL + url + parseParams(params) + '?auth=$token'),
+      Uri.parse(endpoint),
     );
 
     return json.decode(response.body);
   }
 
-  Future<dynamic> sendPatchRequest(url, payload) async {
+  Future<dynamic> sendPatchRequest(
+    String url,
+    Map<String, dynamic> payload,
+  ) async {
+    final String endpoint = await concateAuthToken(baseURL + url);
+
     final response = await http.patch(
-      Uri.parse(baseURL + url + '?auth=$token'),
+      Uri.parse(endpoint),
       body: json.encode(payload ??= {}),
     );
 
     return json.decode(response.body);
   }
 
-  Future<dynamic> sendCustomPostUrlRequest(url, payload) async {
+  Future<dynamic> sendCustomPostUrlRequest(
+    String url,
+    Map<String, dynamic> payload,
+  ) async {
     final response = await http.post(
       Uri.parse(url),
       body: json.encode(payload),
@@ -55,13 +57,26 @@ class RequestAdapter {
     return json.decode(response.body);
   }
 
-  Future<dynamic> sendPostRequest(url, payload, {auth = false}) async {
+  Future<dynamic> sendPostRequest(
+    String url,
+    Map<String, dynamic> payload, {
+    auth = false,
+  }) async {
+    final String endpoint = await concateAuthToken(baseURL + url);
+
     final response = await http.post(
-      Uri.parse(baseURL + url + '?auth=$token'),
+      Uri.parse(endpoint),
       body: json.encode(payload ??= {}),
     );
 
     return json.decode(response.body);
+  }
+
+  Future<String> concateAuthToken(String url) async {
+    final tokenLocalStorage = new LocalStorage(fileName: 'tokalog_token');
+
+    final token = await tokenLocalStorage.readContent();
+    return '$url?auth=$token';
   }
 
   String parseParams(params) {

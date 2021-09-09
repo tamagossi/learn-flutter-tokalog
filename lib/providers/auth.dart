@@ -12,7 +12,10 @@ class AuthProvider with ChangeNotifier {
   final String _errorMessage = 'auth provider error';
   final String _firebaseAuthUrl = dotenv.env['FIREBASE_AUTH_URL'];
   final String _apiKey = dotenv.env['FIREBASE_KEY'];
+
   final tokenLocalStorage = new LocalStorage(fileName: 'tokalog_token');
+  final tokenExpiresStorage =
+      new LocalStorage(fileName: 'tokalog_token_exprires_in');
 
   AuthProvider() {
     tokenLocalStorage.readContent().then(
@@ -95,8 +98,6 @@ class AuthProvider with ChangeNotifier {
 
   void _storeTokenToStorage({String tokenId}) async {
     tokenLocalStorage.writeContent(tokenId);
-
-    final String storedToken = await tokenLocalStorage.readContent();
   }
 
   void _storeResponseData({String tokenId, String id, String expiresIn}) {

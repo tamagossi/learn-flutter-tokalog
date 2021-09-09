@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tokalog/models/exceptions/http.dart';
 import 'package:tokalog/models/product.dart';
 import 'package:tokalog/services/product.dart';
 
@@ -59,9 +60,11 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> getProducts() async {
     try {
-      _productService = new ProductService();
-      var response = await _productService.getProducts();
+      ProductService _productService = new ProductService();
       List<Product> products = [];
+
+      var response = await _productService.getProducts();
+      _handleError(response);
 
       response.forEach((key, value) {
         products.add(Product(
@@ -77,7 +80,9 @@ class ProductProvider with ChangeNotifier {
       _products = products;
       notifyListeners();
     } catch (error) {
-      throw ('$_errorMessage - getting product: \n$error');
+      throw HTTPRequestException(
+        message: '$_errorMessage - getting product: \n$error',
+      );
     }
   }
 
@@ -102,5 +107,13 @@ class ProductProvider with ChangeNotifier {
 
   List<Product> get products {
     return [..._products];
+  }
+
+  void _handleError(response) {
+    if (response['error'] != null) {
+      throw HTTPRequestException(
+        message: response['error'],
+      );
+    }
   }
 }
