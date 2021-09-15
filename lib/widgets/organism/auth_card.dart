@@ -17,8 +17,12 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthCardState extends State<AuthCard>
+    with SingleTickerProviderStateMixin {
   final _passwordController = TextEditingController();
+  AnimationController _animationController;
+  Animation<Size> _highAnimation;
+
   final GlobalKey<FormState> _formKey = GlobalKey();
   var _isLoading = false;
 
@@ -26,6 +30,38 @@ class _AuthCardState extends State<AuthCard> {
     'email': '',
     'password': '',
   };
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 300,
+      ),
+    );
+
+    _highAnimation = Tween<Size>(
+      begin: Size(double.infinity, 240),
+      end: Size(double.infinity, 300),
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    _highAnimation.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
+  }
 
   void _submit() async {
     try {
@@ -79,16 +115,16 @@ class _AuthCardState extends State<AuthCard> {
   void _switchAuthMode() {
     if (widget.authMode == AuthMode.Login) {
       widget.setAuthMode(AuthMode.Signup);
+      _animationController.forward();
     } else {
       widget.setAuthMode(AuthMode.Login);
+      _animationController.reverse();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final containerHeight =
-        (widget.authMode == AuthMode.Signup ? 300 : 240).toDouble();
 
     return Container(
       height: 400,
@@ -106,14 +142,14 @@ class _AuthCardState extends State<AuthCard> {
                         color: Theme.of(context).accentColor,
                       ),
                     ),
-                    height: containerHeight,
+                    height: _highAnimation?.value?.height,
                   )
                 : Container(
-                    height: containerHeight,
+                    height: _highAnimation?.value?.height,
                     padding: EdgeInsets.all(16.0),
                     width: deviceSize.width * 0.75,
                     constraints: BoxConstraints(
-                      minHeight: containerHeight,
+                      minHeight: _highAnimation?.value?.height ?? 100,
                     ),
                     child: Form(
                       key: _formKey,
