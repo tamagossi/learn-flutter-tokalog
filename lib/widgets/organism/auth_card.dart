@@ -51,16 +51,6 @@ class _AuthCardState extends State<AuthCard>
         curve: Curves.easeInOut,
       ),
     );
-
-    _highAnimation.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _animationController.dispose();
   }
 
   void _submit() async {
@@ -144,12 +134,16 @@ class _AuthCardState extends State<AuthCard>
                     ),
                     height: _highAnimation?.value?.height,
                   )
-                : Container(
-                    height: _highAnimation?.value?.height,
-                    padding: EdgeInsets.all(16.0),
-                    width: deviceSize.width * 0.75,
-                    constraints: BoxConstraints(
-                      minHeight: _highAnimation?.value?.height ?? 100,
+                : AnimatedBuilder(
+                    animation: _highAnimation,
+                    builder: (ctx, ch) => Container(
+                      child: ch,
+                      height: _highAnimation?.value?.height,
+                      padding: EdgeInsets.all(16.0),
+                      width: deviceSize.width * 0.75,
+                      constraints: BoxConstraints(
+                        minHeight: _highAnimation?.value?.height ?? 100,
+                      ),
                     ),
                     child: Form(
                       key: _formKey,
